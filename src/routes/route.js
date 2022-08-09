@@ -31,7 +31,8 @@ router.get("/movies/:indexNumber", function(req, res){
 router.get("/shoes", function(req, res){
     let queryParams = req.query
     let brand = queryParams.brand
-    res.send("dummy response")
+    console.log("Brand  is ==>",brand)
+    res.send("PUMA")
 })
 
 // uses query params
@@ -102,6 +103,35 @@ router.get("/films/:filmId", function(req, res){
        //if there is no match give an error response
        res.send("The film id doesn't match any movie")
 })
+
+router.get('/sol1',function(req,res){
+    let array=[1,2,3,5,6,7]
+    let missingNumber=0
+    let sum=((array.length+1)*(array.length+2))/2 //(n*(n+1))/2
+    let sumArray=0
+    for(i=0;i<array.length;i++){
+
+        sumArray=sumArray+array[i]
+
+    }
+    missingNumber=sum-sumArray
+    res.send({data:missingNumber})
+    console.log("The missing number from the given array is==>",missingNumber)
+})
+
+router.get('/sol2',function(req,res){
+   let array=[33,34,35,37,38];
+   let missingNumber=0;
+   let sumArray=0;
+   let sum=((array.length+1)*(array[0]+array[array.length-1]))/2;
+   for(let i=0;i<array.length;i++){
+       sumArray=sumArray+array[i];
+   }
+   missingNumber=sum-sumArray;
+   res.send({data:missingNumber})
+   console.log("The missing number from the given array is==>",missingNumber)
+})
+
 
 module.exports = router;
 // adding this comment for no reason
