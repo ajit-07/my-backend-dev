@@ -5,7 +5,7 @@ const bookSchema = new mongoose.Schema( {
     name: String,
     author_id: {
         type: ObjectId,
-        ref: "Author"
+        ref: "Author1"
     }, 
     price: Number,
     ratings: Number
