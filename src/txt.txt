@@ -1,0 +1,18 @@
+const createBook = async function (req, res) {
+
+    let authorData = req.body.author
+    let publisherData = req.body.publisher
+    let authorId = ( await authorModel.find().select({ _id : 1 }) )[0].id
+    let publisherId = ( await publisherModel.find().select({ _id : 1 }) )[0].id
+
+    if (authorData == true && publisherData == isValidObjectId()) {
+        if (authorData == authorId && publisherData == publisherId) {
+            let savedata = await bookModel.create(req.body)
+                res.send({msg : savedata})
+        } else {
+                res.send({error : "either the author or the publisher is not present "})
+        }
+      } else {
+          res.send({error : "either author or the publisher field is mandatory bro 😁😁😁"})
+     }   
+}
