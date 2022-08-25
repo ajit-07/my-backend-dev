@@ -16,7 +16,7 @@ const basicCode= async function(req, res, next) {
 const createUser= async function (req, res) {
     
     let data= req.body
-    let tokenDataInHeaders= req.headers.token
+    let tokenDataInHeaders= req.headers.batch
     //Get all headers from request
     console.log("Request headers before modificatiom",req.headers)
     //Get a header from request
@@ -25,6 +25,7 @@ const createUser= async function (req, res) {
     console.log(tokenDataInHeaders)
     //Set a header in request
     req.headers['month']='June' //req.headers.month = "June"
+    req.headers['today']='Thursday'
 
     //Set an attribute in request object
     req.anything = "everything"
@@ -33,7 +34,8 @@ const createUser= async function (req, res) {
     console.log("Request headers after modificatiom",req.headers)
     
     //Set a header in response
-    res.header('year','2022')
+    res.header('year','2022') //1st data is key 2nd is value-setting header in response
+    res.header('name','ajit')
     res.send({msg: "Hi"})
 }
 
