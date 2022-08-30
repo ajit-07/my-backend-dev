@@ -3,37 +3,40 @@ const productModel = require("../models/productModel");
 const userModel=require("../models/userModel")
 
 const createOrder=async function(req,res){
-    let data = req.body;
-    let order1 = await orderModel.create(data);
-    let userId = req.body.user_Id; 
-    let productId = req.body.product_Id;      
-    let validUserId = await userModel.findById(userId);
-    let validProductId= await productModel.findById(productId)
+    let orderData = req.body;
+    let userid=orderData.user_Id;
 
-    if (validUserId && validProductId) {
-        let validation = req.headers.isfreeappuser;
-        if (validation == "true") {
-            order1.amount = 0;
-            order1.isfreeappuser = true;
-            order1.save();
-            res.send({ data: order1 });
-        }
-        else {
-            let a = validUserId.balance - validProductId.price
-            if (a > 0) {
-                validUserId.balance = a;
-                validUserId.save();
-                res.send({ data: validUserId })
-            }
-            else {
-                res.send({ msg: "insufficient balance" });
-            }
-        }
+    let user=await userModel.findById(userid);
+
+    if(!user){
+        return res.send({status:false,msg:"User doesn't exixt"})
     }
-    else {
-        res.send("The userId and Productid is not valid");
+
+    let productid=orderData.product_Id
+    let product=await productModel.findById(productid);
+
+    if(!product){
+        return res.send({status:false,msg:"Product doesn't exist"})
     }
+
+    if(!req.appTypeFree && user.balance>=product.price){
+        user.balance=user.balance-product.price;
+        await user.save();
+
+        orderData.amount=product.price;
+        orderData.isFreeAppUser=false;
+        let orderCreated=await orderModel.create(orderData)
+        return res.send({status:true,data:orderCreated})
+    }else if(!req.appTypeFree){
+        return res.send({status:false,msg:"user doesn't have sufficient balance"})
+    }else{
+        orderData.amount=0;
+        orderData.isFreeAppUser=true;
+        let orderCreated=await orderModel.create(orderData)
+        return res.send({status:true,data:orderCreated})
+    }
+
+
 
 };
-
 module.exports.createOrder=createOrder;
