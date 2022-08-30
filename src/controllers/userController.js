@@ -34,11 +34,12 @@ const loginUser = async function (req, res) {
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "thorium",
-      organisation: "FunctionUp",
+      batch: "plutonium",
+      organisation: "functionUp",
     },
     "functionup-plutonium-very-very-secret-key"
   );
+  console.log(token);
   res.setHeader("x-auth-token", token);
   res.send({ status: true, token: token });
 };
@@ -75,6 +76,18 @@ const getUserData = async function (req, res) {
 };
 
 const updateUser = async function (req, res) {
+
+  let token = req.headers["x-Auth-token"];
+  if (!token) token = req.headers["x-auth-token"];
+
+  if (!token) {return res.send({ status: false, msg: "token must be present" })};
+
+  console.log(token);
+
+  let decodedToken = jwt.verify(token, "functionup-plutonium-very-very-secret-key");
+  if (!decodedToken){
+    return res.send({ status: false, msg: "token is invalid" });}
+
   // Do the same steps here:
   // Check if the token is present
   // Check if the token present is a valid token
@@ -88,8 +101,8 @@ const updateUser = async function (req, res) {
   }
 
   let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
-  res.send({ status: updatedUser, data: updatedUser });
+  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData, {new:true});
+  res.send({ status: true, data: updatedUser });
 };
 
 module.exports.createUser = createUser;
