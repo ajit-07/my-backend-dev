@@ -79,7 +79,7 @@ let getOtp = async function (req, res) {
 }
 
 let getByDistrictId = async function(req,res){
-    let districtId=req.query.district_id
+   try{ let districtId=req.query.district_id
     let date=req.query.date
     console.log(`Query params are ${districtId} ${date}`)
     var options={
@@ -88,8 +88,12 @@ let getByDistrictId = async function(req,res){
     }
     let result=await axios(options)
     console.log(result.data)
-    res.send({status:true,Data:result.data})
-
+    res.status(200).send({status:true,Data:result.data})
+}
+catch(err){
+    console.log(err)
+    res.status(500).send({msg:err.message})
+}
 }
 module.exports.getByDistrictId=getByDistrictId
 module.exports.getStates = getStates
