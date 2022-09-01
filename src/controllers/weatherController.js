@@ -44,7 +44,7 @@ const getSortedTemperature=async function(req,res){
         let cities = ["Bengaluru", "Mumbai", "Delhi", "Kolkata", "Chennai", "London", "Moscow"]
         let objOfCities = [];
     
-        len = cities.length;
+        let len = cities.length;
         for (let i = 0; i < len; i++) {
           let obj = { city: cities[i] }
     
